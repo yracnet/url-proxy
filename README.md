@@ -49,8 +49,16 @@ http://localhost:2000/proxy/[domain=my-server:8080]/[url=path/to/resources?q=1]
 
 If you want to access the resources from the example above through the proxy, you would make a request to:
 
+### Target:
+
 ```
-http://localhost:2000/proxy/my-server:8080/path/to/resources?q=1
+http://jsonplaceholder.typicode.com/todos/1
+```
+
+### URL Proxy
+
+```
+http://localhost:2000/proxy/jsonplaceholder.typicode.com/todos/1
 ```
 
 ## Note
