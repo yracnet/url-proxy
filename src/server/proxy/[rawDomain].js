@@ -3,19 +3,18 @@ import {
   ensureBody,
   ensureBodyString,
   getFetchRequestHeaders,
-  parseDomain,
+  parseRawDomain,
   processProxyResponse,
 } from "../headers";
-
 import { onLogger } from "../logger";
 
-export const proxyImpl = async (
-  config,
+const proxyHandler = async (
   clientRequest,
   clientResponse,
-  next
+  next,
+  config = {}
 ) => {
-  const { group, schema, domain } = parseDomain(clientRequest);
+  const { group, schema, domain } = parseRawDomain(clientRequest);
   const { method, body } = clientRequest;
   const fetchTarget = `${schema}://${domain}${clientRequest.url}`;
   try {
@@ -58,4 +57,4 @@ export const proxyImpl = async (
   }
 };
 
-export default async (req, res, next) => proxyImpl({}, req, res, next);
+export default async (req, res, next) => proxyHandler(req, res, next, {});

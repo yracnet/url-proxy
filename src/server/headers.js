@@ -1,12 +1,21 @@
 import { Writable } from "stream";
-export const parseDomain = (clientRequest, config) => {
-  const { rawDomain } = clientRequest.params;
-  const regex = /^(([^:]+):)?(([^:]+):)?([^:]+)$/;
-  const match = rawDomain.match(regex);
+
+const isPort = (value) => {
+  const num = Number(value);
+  return Number.isInteger(num) && !isNaN(num);
+};
+
+export const parseRawDomain = (clientRequest, config) => {
+  let { rawDomain = "" } = clientRequest.params;
+  const params = rawDomain.split(":").reverse();
+  if (isPort(params[0])) {
+    let port = params.shift();
+    params[0] = params[0] + ":" + port;
+  }
   return {
-    group: match[2] || "common",
-    schema: match[4] || "http",
-    domain: match[5],
+    group: params[2] || "common",
+    schema: params[1] || "http",
+    domain: params[0] || "localhost",
   };
 };
 
@@ -47,7 +56,7 @@ export const processProxyResponseHeaders = (
     "server",
     "strict-transport-security",
     "transfer-encoding",
-    "content-length",
+    "content-lenght",
     "host",
     "origin",
     "referer",
