@@ -17,17 +17,19 @@ const proxyHandler = async (
   const { group, schema, domain } = parseRawDomain(clientRequest);
   const { method, body } = clientRequest;
   const fetchTarget = `${schema}://${domain}${clientRequest.url}`;
-  try {
-    const fetchRequestHeader = getFetchRequestHeaders(
-      clientRequest.headers,
-      config
-    );
-    onLogger("PROXY-REQUEST", {
-      method,
-      url: fetchTarget,
+  const fetchRequestHeader = getFetchRequestHeaders(
+    clientRequest.headers,
+    config
+  );
+  onLogger("PROXY-REQUEST", {
+    method,
+    url: fetchTarget,
+    request: {
       headers: fetchRequestHeader,
       body: ensureBodyString(body, method),
-    });
+    },
+  });
+  try {
     const fetchResponse = await fetch(fetchTarget, {
       method,
       headers: fetchRequestHeader,
@@ -42,16 +44,29 @@ const proxyHandler = async (
     onLogger("PROXY-RESPONSE", {
       method,
       url: fetchTarget,
-      status: proxyResponse.status,
-      headers: proxyResponse.headers,
-      body: proxyResponse.content,
+      request: {
+        headers: fetchRequestHeader,
+        body: ensureBodyString(body, method),
+      },
+      response: {
+        status: proxyResponse.status,
+        headers: proxyResponse.headers,
+        body: proxyResponse.content,
+      },
     });
   } catch (error) {
     onLogger("PROXY-ERROR", {
+      method,
       url: fetchTarget,
-      status: "ERROR",
-      headers: {},
-      body: error,
+      request: {
+        headers: fetchRequestHeader,
+        body: ensureBodyString(body, method),
+      },
+      response: {
+        status: "ERROR",
+        headers: {},
+        body: error,
+      },
     });
     next(error);
   }
