@@ -1,4 +1,14 @@
 import { Writable } from "stream";
+export const parseDomain = (clientRequest, config) => {
+  const { rawDomain } = clientRequest.params;
+  const regex = /^(([^:]+):)?(([^:]+):)?([^:]+)$/;
+  const match = rawDomain.match(regex);
+  return {
+    group: match[2] || "common",
+    schema: match[4] || "http",
+    domain: match[5],
+  };
+};
 
 export const getFetchRequestHeaders = (reqHeaders, config) => {
   const headersNotAllowed = new Set([

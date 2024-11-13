@@ -3,6 +3,7 @@ import {
   ensureBody,
   ensureBodyString,
   getFetchRequestHeaders,
+  parseDomain,
   processProxyResponse,
 } from "../headers";
 
@@ -14,10 +15,10 @@ export const proxyImpl = async (
   clientResponse,
   next
 ) => {
-  const { domain, group = "common", protocol = "http" } = clientRequest.params;
+  const { group, schema, domain } = parseDomain(clientRequest);
   const { method, body } = clientRequest;
+  const fetchTarget = `${schema}://${domain}${clientRequest.url}`;
   try {
-    const fetchTarget = `${protocol}://${domain}${clientRequest.url}`;
     const fetchRequestHeader = getFetchRequestHeaders(
       clientRequest.headers,
       config
