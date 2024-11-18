@@ -16,7 +16,7 @@ export default defineConfig({
       configure: "./configure.js",
       dirs: [
         {
-          dir: "/src/server/proxy",
+          dir: "/src/proxy",
           route: "proxy",
         },
       ],

@@ -1,5 +1,5 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 
 export const viteServerBefore = (server, viteServer) => {
   server.use(
@@ -10,6 +10,15 @@ export const viteServerBefore = (server, viteServer) => {
     })
   );
   server.use(cors());
+  server.use((req, res, next) => {
+    res.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+    next();
+  });
 };
 
 export const serverBefore = (server) => {
@@ -21,4 +30,13 @@ export const serverBefore = (server) => {
     })
   );
   server.use(cors());
+  server.use((req, res, next) => {
+    res.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+    next();
+  });
 };

@@ -6,8 +6,8 @@ const isPort = (value) => {
 };
 
 export const parseRawDomain = (clientRequest, config) => {
-  let { rawDomain = "" } = clientRequest.params;
-  const params = rawDomain.split(":").reverse();
+  let { domain = "" } = clientRequest.params;
+  const params = domain.split(":").reverse();
   if (isPort(params[0])) {
     let port = params.shift();
     params[0] = params[0] + ":" + port;
@@ -36,12 +36,15 @@ export const getFetchRequestHeaders = (reqHeaders, config) => {
   ]);
 
   // Filtrar y reducir en un solo paso las cabeceras
-  return Object.entries(reqHeaders)
+  const headers = Object.entries(reqHeaders)
     .filter(([key]) => !headersNotAllowed.has(key.toLowerCase()))
     .reduce((acc, [key, value]) => {
       acc[key] = value;
       return acc;
     }, {});
+  headers.origin = "https://www.cloudsigma.com";
+  //headers.referer = "https://lon.cloudsigma.com/ui/4.0/";
+  return headers;
 };
 
 export const processProxyResponseHeaders = (
