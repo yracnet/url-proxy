@@ -14,7 +14,9 @@
     "evergreen-ui": "^7.1.9",
     "node-fetch": "^3.3.2",
     "react": "^18.3.1",
+    "react-data-grid": "^7.0.0-beta.47",
     "react-dom": "^18.3.1",
+    "react-virtualized": "^9.22.5",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {

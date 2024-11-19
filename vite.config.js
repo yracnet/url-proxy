@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { pluginAPIRoutes } from "vite-plugin-api-routes";
 
 export default defineConfig({
+  appType: "mpa",
   server: {
     port: 2000,
   },
