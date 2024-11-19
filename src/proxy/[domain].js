@@ -15,12 +15,6 @@ const proxyHandler = async (
   config = {}
 ) => {
   console.log("===================================");
-  clientResponse.setHeader(
-    "Cache-Control",
-    "no-store, no-cache, must-revalidate, proxy-revalidate"
-  );
-  clientResponse.setHeader("Pragma", "no-cache");
-  clientResponse.setHeader("Expires", "0");
 
   const { group, schema, domain } = parseRawDomain(clientRequest);
   const { method, body } = clientRequest;
@@ -29,7 +23,6 @@ const proxyHandler = async (
     clientRequest.headers,
     config
   );
-  console.log("::::::::::::::::::::::::::");
   onLogger("PROXY-REQUEST", {
     group,
     method,
