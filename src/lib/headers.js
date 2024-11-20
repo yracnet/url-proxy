@@ -21,21 +21,18 @@ export const parseRawDomain = (clientRequest, config) => {
 
 export const getFetchRequestHeaders = (reqHeaders, config) => {
   const headersNotAllowed = new Set([
-    "origin", // Afecta CORS, no debe ser enviada por el cliente al servidor
-    "referer", // A veces puede causar problemas si se envía de forma incorrecta
-    "host", // El proxy debería manejar el encabezado "Host"
-    "sec-fetch-site", // Cabeceras relacionadas con la seguridad
+    "origin",
+    "referer",
+    "host",
+    "sec-fetch-site",
     "sec-fetch-mode",
     "sec-fetch-dest",
     "sec-fetch-user",
-    "sec-ch-ua", // Headers de características del navegador que no deberían ser enviados por el cliente
+    "sec-ch-ua",
     "sec-ch-ua-mobile",
     "sec-ch-ua-platform",
-    // "cookie", // El proxy puede manejar las cookies de manera independiente
-    // "authorization", // Esta cabecera se debe manejar con precaución
   ]);
 
-  // Filtrar y reducir en un solo paso las cabeceras
   const headers = Object.entries(reqHeaders)
     .filter(([key]) => !headersNotAllowed.has(key.toLowerCase()))
     .reduce((acc, [key, value]) => {
@@ -111,6 +108,7 @@ export const processProxyResponse = async (
   return {
     status: fetchResponse.status,
     headers: clientResponse.headers,
+    contentType,
     content: contentAsText,
   };
 };
@@ -127,4 +125,15 @@ export const ensureBodyString = (body, method) => {
     return undefined;
   }
   return body?.toString();
+};
+
+export const urlParse = (urlString) => {
+  const url = new URL(urlString);
+  return {
+    schema: url.protocol,
+    server: url.hostname,
+    port: url.port,
+    path: url.pathname,
+    query: url.searchParams,
+  };
 };

@@ -3,19 +3,11 @@ import DataGrid from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 import { COLS, LOG } from "./request";
 
-const MyDataGrid = () => {
-  const [selectedRows, setSelectedRows] = useState([]);
+export const DataGridExample = () => {
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const handleRowsSelected = ({ row }) => {
-    console.log(">>>>", row);
-    setSelectedRows((prev) => [...prev, row.id]);
-    //setSelectedRows(rows.map((row) => row.id));
-  };
-
-  const handleRowsDeselected = (rows) => {
-    setSelectedRows(
-      selectedRows.filter((id) => !LOG.map((row) => row.rowIdx).includes(id))
-    );
+    setSelectedRow(row);
   };
 
   return (
@@ -35,13 +27,9 @@ const MyDataGrid = () => {
           fontSize: "12px",
         }}
         onCellClick={handleRowsSelected}
-        selectedRows={selectedRows}
-        onSelectedRowsChange={handleRowsSelected}
-        onRowsChange={handleRowsDeselected}
+        selectedRows={selectedRow}
       />
-      <code>{JSON.stringify({ selectedRows })}</code>
+      <code>{JSON.stringify(selectedRow)}</code>
     </div>
   );
 };
-
-export default MyDataGrid;

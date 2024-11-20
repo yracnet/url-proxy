@@ -5,8 +5,8 @@ import {
   getFetchRequestHeaders,
   parseRawDomain,
   processProxyResponse,
-} from "../headers";
-import { onLogger } from "../logger";
+} from "../lib/headers";
+import { createRequest, updateError, updateResponse } from "../lib/storage";
 
 const proxyHandler = async (
   clientRequest,
@@ -15,7 +15,6 @@ const proxyHandler = async (
   config = {}
 ) => {
   console.log("===================================");
-
   const { group, schema, domain } = parseRawDomain(clientRequest);
   const { method, body } = clientRequest;
   const fetchTarget = `${schema}://${domain}${clientRequest.url}`;
@@ -23,14 +22,13 @@ const proxyHandler = async (
     clientRequest.headers,
     config
   );
-  onLogger("PROXY-REQUEST", {
+  const idRequest = await createRequest({
     group,
     method,
     url: fetchTarget,
-    request: {
-      headers: fetchRequestHeader,
-      body: ensureBodyString(body, method),
-    },
+    headers: fetchRequestHeader,
+    contentType: fetchRequestHeader["content-type"],
+    content: ensureBodyString(body, method),
   });
   try {
     const fetchResponse = await fetch(fetchTarget, {
@@ -44,35 +42,14 @@ const proxyHandler = async (
       clientResponse,
       config
     );
-    onLogger("PROXY-RESPONSE", {
-      group,
-      method,
-      url: fetchTarget,
-      request: {
-        headers: fetchRequestHeader,
-        body: ensureBodyString(body, method),
-      },
-      response: {
-        status: proxyResponse.status,
-        headers: proxyResponse.headers,
-        body: proxyResponse.content,
-      },
+    updateResponse(idRequest, {
+      status: proxyResponse.status,
+      headers: proxyResponse.headers,
+      contentType: proxyResponse.contentType,
+      content: proxyResponse.content,
     });
   } catch (error) {
-    onLogger("PROXY-ERROR", {
-      group,
-      method,
-      url: fetchTarget,
-      request: {
-        headers: fetchRequestHeader,
-        body: ensureBodyString(body, method),
-      },
-      response: {
-        status: "ERROR",
-        headers: {},
-        body: error,
-      },
-    });
+    updateError(idRequest, error);
     next(error);
   }
 };
