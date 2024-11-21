@@ -1,6 +1,8 @@
+import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 import { pluginAPIRoutes } from "vite-plugin-api-routes";
 
+// https://vite.dev/config/
 export default defineConfig({
   appType: "mpa",
   server: {
@@ -11,6 +13,7 @@ export default defineConfig({
     outDir: "dist/public",
   },
   plugins: [
+    react(),
     pluginAPIRoutes({
       minify: false,
       routeBase: "",

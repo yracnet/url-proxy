@@ -1,75 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL-Proxy Documentation</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>URL-Proxy Documentation</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+  <body class="container mt-5">
+    <center>
+      <img src="./public/favicon.svg" alt="URL proxy" />
+    </center>
+    <h1 class="display-4">URL-Proxy Documentation</h1>
+    <h1 class="display-4">
+      <a href="/console/">Go to Console</a>
+    </h1>
 
-<body class="container mt-5">
-  <center>
-    <img src="./public/favicon.svg" alt="URL proxy" />
-  </center>
-  <h1 class="display-4">URL-Proxy Documentation</h1>
-  <h1 class="display-4">
-   <a href="/console">Go to Console</a>
-  </h1>
+    <p class="lead">This is an example HTML page for the URL-Proxy project.</p>
 
-  <p class="lead">This is an example HTML page for the URL-Proxy project.</p>
+    <div class="mt-4">
+      <h2>Proxy URLs</h2>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>Target URL:</strong>
+          http://my-server:8080/path/to/resources?q=1<br />
+          <strong>Proxy URL:</strong>
+          <a
+            href="http://localhost:2000/proxy/my-server:8080/path/to/resources?q=1"
+            target="_blank"
+            >http://localhost:2000/proxy/my-server:8080/path/to/resources?q=1</a
+          ><br />
+          <strong>Simplified Format:</strong>
+          http://localhost:2000/proxy/[domain=my-server:8080]/[url=path/to/resources?q=1]
+        </li>
+        <!-- Add more examples as needed -->
+      </ul>
+    </div>
 
-  <div class="mt-4">
-    <h2>Proxy URLs</h2>
-    <ul class="list-group">
-      <li class="list-group-item">
-        <strong>Target URL:</strong> http://my-server:8080/path/to/resources?q=1<br>
-        <strong>Proxy URL:</strong> <a href="http://localhost:2000/proxy/my-server:8080/path/to/resources?q=1"
-          target="_blank">http://localhost:2000/proxy/my-server:8080/path/to/resources?q=1</a><br>
-        <strong>Simplified Format:</strong>
-        http://localhost:2000/proxy/[domain=my-server:8080]/[url=path/to/resources?q=1]
-      </li>
-      <!-- Add more examples as needed -->
-    </ul>
-  </div>
+    <div class="mt-4">
+      <h2>How to Use</h2>
+      <ol class="list-group">
+        <li class="list-group-item">
+          Start the URL-Proxy server on port 2000.
+        </li>
+        <li class="list-group-item">
+          Create a proxy URL using the specified format.
+        </li>
+        <li class="list-group-item">
+          Send requests to the generated proxy URL.
+        </li>
+      </ol>
+    </div>
 
+    <div class="mt-4">
+      <h2>Example Requests</h2>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>Direct GET Request:</strong>
+          <code>GET http://jsonplaceholder.typicode.com/todos/1</code>
+          <a
+            href="http://jsonplaceholder.typicode.com/todos/1"
+            target="_blank"
+            class="btn btn-primary btn-sm float-right"
+            >Try it</a
+          >
+        </li>
 
-  <div class="mt-4">
-    <h2>How to Use</h2>
-    <ol class="list-group">
-      <li class="list-group-item">Start the URL-Proxy server on port 2000.</li>
-      <li class="list-group-item">Create a proxy URL using the specified format.</li>
-      <li class="list-group-item">Send requests to the generated proxy URL.</li>
-    </ol>
-  </div>
+        <li class="list-group-item">
+          <strong>Proxy GET Request:</strong>
+          <code
+            >GET
+            http://localhost:2000/proxy/jsonplaceholder.typicode.com/todos/1</code
+          >
+          <a
+            href="/proxy/jsonplaceholder.typicode.com/todos/1"
+            target="_blank"
+            class="btn btn-primary btn-sm float-right"
+            >Try it</a
+          >
+        </li>
+      </ul>
+    </div>
 
-
-  <div class="mt-4">
-    <h2>Example Requests</h2>
-    <ul class="list-group">
-      <li class="list-group-item">
-        <strong>Direct GET Request:</strong>
-        <code>GET http://jsonplaceholder.typicode.com/todos/1</code>
-        <a href="http://jsonplaceholder.typicode.com/todos/1" target="_blank"
-          class="btn btn-primary btn-sm float-right">Try it</a>
-      </li>
-
-      <li class="list-group-item">
-        <strong>Proxy GET Request:</strong>
-        <code>GET http://localhost:2000/proxy/jsonplaceholder.typicode.com/todos/1</code>
-        <a href="/proxy/jsonplaceholder.typicode.com/todos/1" target="_blank"
-          class="btn btn-primary btn-sm float-right">Try it</a>
-      </li>
-    </ul>
-  </div>
-
-  <div class="mt-4">
-    <h2>Note</h2>
-    <p>Ensure that the target server allows requests from the URL-Proxy server and that any necessary CORS (Cross-Origin
-      Resource Sharing) configurations are in place.</p>
-  </div>
-
-</body>
-
+    <div class="mt-4">
+      <h2>Note</h2>
+      <p>
+        Ensure that the target server allows requests from the URL-Proxy server
+        and that any necessary CORS (Cross-Origin Resource Sharing)
+        configurations are in place.
+      </p>
+    </div>
+  </body>
 </html>
