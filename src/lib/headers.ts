@@ -2,13 +2,33 @@
 //import { Writable } from "stream";
 
 import { Request } from "express";
+import { Response } from "node-fetch";
 
 const isPort = (value: any) => {
   const num = Number(value);
   return Number.isInteger(num) && !isNaN(num);
 };
 
-export const parseURLParameter = (req: Request, config: any) => {
+const processHeaders = (rawHeaders: any, config: any) => {
+  const headers = Object.entries(rawHeaders)
+    .filter((it) => !["host", "origin"].includes(it[0]))
+    .reduce<Record<string, string>>((acc, [name, value]) => {
+      //acc.set(name, Array.isArray(value) ? value.join(";") : String(value));
+      acc[name] = Array.isArray(value) ? value.join(";") : String(value);
+      return acc;
+    }, {});
+  return headers;
+};
+
+export const assertBufferCopy = (data: any) => {
+  if (typeof data === "string") {
+    return Buffer.from(data, "utf-8");
+  } else if (Buffer.isBuffer(data)) {
+    return Buffer.from(data);
+  }
+};
+
+export const parseServeRequest = (req: Request, config: any) => {
   let { domain = "" } = req.params;
   const params = domain.split(":").reverse();
   if (isPort(params[0])) {
@@ -18,8 +38,27 @@ export const parseURLParameter = (req: Request, config: any) => {
   const group = params[2] || "common";
   const schema = params[1] || "http";
   const server = params[0] || "localhost";
-  const url = `${schema}://${server}`;
-  return { group, url };
+  const url = `${schema}://${server}${req.url}`;
+  const method = req.method;
+  const headers = processHeaders(req.headersDistinct, config);
+  const version = req.httpVersion;
+  const content = assertBufferCopy(req.body);
+  const copyContent = assertBufferCopy(req.body);
+  return { group, method, url, headers, version, content, copyContent };
+};
+
+export const parseFetchResponse = async (resp: Response, config: any) => {
+  const headers = processHeaders(resp.headers.raw(), config);
+  const ab = await resp.arrayBuffer();
+  const content = Buffer.from(ab);
+  const copyContent = Buffer.from(ab);
+  return {
+    status: resp.status,
+    size: resp.size,
+    headers,
+    content,
+    copyContent,
+  };
 };
 
 // export const normalizeHeaders = (headers) => {
